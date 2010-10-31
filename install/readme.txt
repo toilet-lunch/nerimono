@@ -9,6 +9,8 @@
 
 1. gitからnerimonoをpull
 
+   $ git pull git://github.com/toilet-lunch/nerimono.git
+
 2. ${NERIMONO}/install/install.shを実行
 
    辞書ファイル格納用ディレクトリを必ず指定
