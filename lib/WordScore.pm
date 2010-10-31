@@ -12,7 +12,6 @@ use DB;
 # WordScore->new(\@word);
 sub new{
     my $this = shift;
-    my %result;
     my $db = DB->new();
     my $strings = Strings->new();
     my $hash = {
@@ -110,28 +109,6 @@ sub filterAlphabet{
 	push(@result,$words->[$i]);
     }
     return @result;
-}
-
-sub getScoreHash{
-    my $this = shift;
-    my $flag = shift; # String "o" or not parameter.
-    my $words;
-    if(defined($flag) && $flag eq "o"){
-	$words = $this->{'origin'};
-    }else{
-	$words = $this->{'normal'}
-    }
-
-    my %result;
-    for(my $i=0;$i<@{$words};$i++){
-
-	if(exists($result{$words->[$i]})){
-	    next;
-	}
-	my $freq = $this->{'DB'}->getFreq($words->[$i]);
-	$result{$words->[$i]} = $freq;
-    }
-    return %result;
 }
 
 1;
