@@ -1,7 +1,6 @@
 package Conf;
 
 use Exporter;
-use TokyoCabinet;
 
 @ISA = qw(Exporter);
 @EXPORT = qw(get);
