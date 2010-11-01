@@ -39,9 +39,9 @@ sub execute{
     my $this = shift;
     my @strs = $this->filterAlphabet($this->{'normal'});
     
-
     for(my $i=0;$i<@strs;$i++){
 	my @base = "";
+	my @index;
 	my $baseStr = "";
 	my %charHash;
 	for(my $j=$i;$j<@strs;$j++){
@@ -49,6 +49,7 @@ sub execute{
 		last;
 	    }
 	    push(@base,split(//,$strs[$j]));
+	    push(@index,$j);
 	    $baseStr .= $strs[$j];
 	}
 	if( exists($this->{'result'}->{$baseStr}) ){
@@ -73,11 +74,24 @@ sub execute{
 	$tryGramProb /= $#base;
 	$tryGramProb /= $penalty;
 
-	$this->{'result'}->{$baseStr} = $tryGramProb;
+	$this->{'result'}->{$baseStr}->{'score'} = $tryGramProb;
+	@{$this->{'result'}->{$baseStr}->{'index'}} = @index;
 	undef(%charHash);
     }
+    my %result;
+    foreach my $str (keys %{$this->{'result'}}){
+	for(my $i=0;$i<@{$this->{'result'}->{$str}->{'index'}};$i++){
+	    my $wordNum = $this->{'result'}->{$str}->{'index'}->[$i];
+	    my $word = $strs[$wordNum];
+	    my $score = $this->{'result'}->{$str}->{'score'};
+	    if(!exists($result{$word}) || $result{$word} <= $score){
+		$result{$word} = $score;
+	    }
+	}
+    }
 
-    return %{$this->{'result'}};
+    #return %{$this->{'result'}};
+    return %result;
 }
 
 sub calc3gramProb{
